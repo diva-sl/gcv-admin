@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import axios from "axios";
 import api from "../api";
 import { UploadCloud, CheckCircle, AlertCircle } from "lucide-react";
 
@@ -11,9 +12,9 @@ interface ImageUploaderProps {
 export default function ImageUploader({
   label,
   onUploadSuccess,
-  initialUrl,
+  initialUrl = "",
 }: ImageUploaderProps) {
-  const [imageUrl, setImageUrl] = useState(initialUrl || "");
+  const [imageUrl, setImageUrl] = useState(initialUrl);
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState("");
@@ -23,9 +24,9 @@ export default function ImageUploader({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate size (limit to 10MB)
+    // Validate size limit (under 10MB)
     if (file.size > 10 * 1024 * 1024) {
-      setError("File size must be under 10MB.");
+      setError("File size exceeds 10MB limit.");
       return;
     }
 
@@ -45,12 +46,10 @@ export default function ImageUploader({
       const { uploadUrl, downloadUrl } = response.data;
       setProgress(40);
 
-      // 2. Perform direct binary upload to S3 via PUT request
-      await api.put(uploadUrl, file, {
+      // 2. Perform direct binary upload to S3 via PUT request using vanilla axios
+      await axios.put(uploadUrl, file, {
         headers: {
           "Content-Type": file.type,
-          // Exclude Authorization header since this goes directly to S3
-          Authorization: undefined,
         },
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round(

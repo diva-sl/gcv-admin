@@ -9,6 +9,7 @@ import {
   Loader,
   Database,
   FileSpreadsheet,
+  LayoutGrid,
 } from "lucide-react";
 
 interface Project {
@@ -76,10 +77,8 @@ export default function Dashboard({
       {/* Navbar header */}
       <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-blue-500 text-2xl font-bold">
-              dashboard
-            </span>
+          <div className="flex items-center gap-2.5">
+            <LayoutGrid className="w-6 h-6 text-blue-500 shrink-0" />
             <span className="font-headline text-lg font-extrabold tracking-tight">
               GCV Digital Engineering Management
             </span>
