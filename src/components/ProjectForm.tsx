@@ -28,6 +28,9 @@ interface ProjectData {
   metrics: Metric[];
   siteUrl: string;
   adminUrl: string;
+  desktopMockup?: string;
+  tabletMockup?: string;
+  mobileMockup?: string;
   screenshots: Screenshot[];
 }
 
@@ -58,6 +61,15 @@ export default function ProjectForm({
   const [solution, setSolution] = useState(initialData?.solution || "");
   const [siteUrl, setSiteUrl] = useState(initialData?.siteUrl || "");
   const [adminUrl, setAdminUrl] = useState(initialData?.adminUrl || "");
+  const [desktopMockup, setDesktopMockup] = useState(
+    initialData?.desktopMockup || "",
+  );
+  const [tabletMockup, setTabletMockup] = useState(
+    initialData?.tabletMockup || "",
+  );
+  const [mobileMockup, setMobileMockup] = useState(
+    initialData?.mobileMockup || "",
+  );
 
   // Dynamic Lists states
   const [architecture, setArchitecture] = useState<string[]>(
@@ -131,6 +143,9 @@ export default function ProjectForm({
       ),
       siteUrl,
       adminUrl,
+      desktopMockup,
+      tabletMockup,
+      mobileMockup,
       screenshots: screenshots.filter((s) => s.path !== ""),
     });
   };
@@ -164,7 +179,7 @@ export default function ProjectForm({
         {/* Project ID */}
         <div className="space-y-1.5">
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-            Project ID (Unique Key URL prefix, e.g. "kiddostyle")
+            Project ID (Unique Key URL prefix, e.g. "ecom-portal")
           </label>
           <input
             type="text"
@@ -174,7 +189,7 @@ export default function ProjectForm({
             onChange={(e) =>
               setProjectId(e.target.value.toLowerCase().replace(/\s+/g, "-"))
             }
-            placeholder="kiddostyle"
+            placeholder="e.g. project-slug-name"
             className="w-full border border-slate-200 bg-slate-50/50 rounded-xl py-2.5 px-4 text-slate-800 text-sm focus:outline-none focus:border-blue-500 transition-all disabled:opacity-50"
           />
         </div>
@@ -189,7 +204,7 @@ export default function ProjectForm({
             required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Kids Wear eCommerce & Warehouse Automation Panel"
+            placeholder="e.g. Enterprise E-Commerce Platform / OTT Streaming Portal"
             className="w-full border border-slate-200 bg-slate-50/50 rounded-xl py-2.5 px-4 text-slate-800 text-sm focus:outline-none focus:border-blue-500 transition-all"
           />
         </div>
@@ -204,7 +219,7 @@ export default function ProjectForm({
             required
             value={client}
             onChange={(e) => setClient(e.target.value)}
-            placeholder="Kids Fashion eCommerce"
+            placeholder="e.g. Global Retailers Inc. / Education Alliance / Donation Hub"
             className="w-full border border-slate-200 bg-slate-50/50 rounded-xl py-2.5 px-4 text-slate-800 text-sm focus:outline-none focus:border-blue-500 transition-all"
           />
         </div>
@@ -237,7 +252,7 @@ export default function ProjectForm({
           rows={3}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Engineered a premium children's clothing storefront..."
+          placeholder="e.g. Describe the scope of work, user base, and core business value delivered by this project..."
           className="w-full border border-slate-200 bg-slate-50/50 rounded-xl py-2.5 px-4 text-slate-800 text-sm focus:outline-none focus:border-blue-500 transition-all"
         />
       </div>
@@ -246,14 +261,14 @@ export default function ProjectForm({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-1.5">
           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-            Key Outcome (Badge Text, e.g. "+38% sales conversion")
+            Key Outcome (Badge Text, e.g. "+38% sales conversion / 99.99% uptime")
           </label>
           <input
             type="text"
             required
             value={outcome}
             onChange={(e) => setOutcome(e.target.value)}
-            placeholder="+38% sales conversion"
+            placeholder="e.g. +38% sales conversion / 99.99% uptime during peak loads"
             className="w-full border border-slate-200 bg-slate-50/50 rounded-xl py-2.5 px-4 text-slate-800 text-sm focus:outline-none focus:border-blue-500 transition-all"
           />
         </div>
@@ -267,7 +282,7 @@ export default function ProjectForm({
             required
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
-            placeholder="Next.js, React 19, Go / Golang, Tailwind CSS"
+            placeholder="e.g. React, Node.js, Go, MongoDB, AWS S3, Stripe API"
             className="w-full border border-slate-200 bg-slate-50/50 rounded-xl py-2.5 px-4 text-slate-800 text-sm focus:outline-none focus:border-blue-500 transition-all"
           />
         </div>
@@ -280,6 +295,33 @@ export default function ProjectForm({
         onUploadSuccess={(url) => setImage(url)}
       />
 
+      {/* Dynamic Multi-Device Responsive Mockups Section */}
+      <div className="space-y-3 p-6 bg-slate-50/40 border border-slate-200/60 rounded-2xl">
+        <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider">
+          Multi-Device Responsive Mockups (S3 Upload)
+        </h3>
+        <p className="text-xs text-slate-400">
+          Upload custom device-framed mockups (MacBook, iPad, iPhone) for the responsive showcase section.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <ImageUploader
+            label="Desktop MacBook Mockup"
+            initialUrl={desktopMockup}
+            onUploadSuccess={(url) => setDesktopMockup(url)}
+          />
+          <ImageUploader
+            label="Tablet iPad Mockup"
+            initialUrl={tabletMockup}
+            onUploadSuccess={(url) => setTabletMockup(url)}
+          />
+          <ImageUploader
+            label="Mobile iPhone Mockup"
+            initialUrl={mobileMockup}
+            onUploadSuccess={(url) => setMobileMockup(url)}
+          />
+        </div>
+      </div>
+
       {/* Challenge and Solution */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-1.5">
@@ -291,7 +333,7 @@ export default function ProjectForm({
             rows={4}
             value={challenge}
             onChange={(e) => setChallenge(e.target.value)}
-            placeholder="The storefront required capacity to host..."
+            placeholder="e.g. Describe the client's problem, performance bottlenecks, scale challenges, or feature requirements..."
             className="w-full border border-slate-200 bg-slate-50/50 rounded-xl py-2.5 px-4 text-slate-800 text-sm focus:outline-none focus:border-blue-500 transition-all"
           />
         </div>
@@ -305,7 +347,7 @@ export default function ProjectForm({
             rows={4}
             value={solution}
             onChange={(e) => setSolution(e.target.value)}
-            placeholder="GCV designed a state-of-the-art Single-Page Application..."
+            placeholder="e.g. Explain how your engineering team resolved the challenge, the architectural choices made, and integrations built..."
             className="w-full border border-slate-200 bg-slate-50/50 rounded-xl py-2.5 px-4 text-slate-800 text-sm focus:outline-none focus:border-blue-500 transition-all"
           />
         </div>
@@ -321,7 +363,7 @@ export default function ProjectForm({
             type="url"
             value={siteUrl}
             onChange={(e) => setSiteUrl(e.target.value)}
-            placeholder="https://kiddostyle.gcvdanta.com/"
+            placeholder="https://example.com"
             className="w-full border border-slate-200 bg-slate-50/50 rounded-xl py-2.5 px-4 text-slate-800 text-sm focus:outline-none focus:border-blue-500 transition-all"
           />
         </div>
@@ -334,7 +376,7 @@ export default function ProjectForm({
             type="url"
             value={adminUrl}
             onChange={(e) => setAdminUrl(e.target.value)}
-            placeholder="https://admin.kiddostyle.gcvdanta.com/"
+            placeholder="https://admin.example.com"
             className="w-full border border-slate-200 bg-slate-50/50 rounded-xl py-2.5 px-4 text-slate-800 text-sm focus:outline-none focus:border-blue-500 transition-all"
           />
         </div>
