@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import api from "../api";
-import { UploadCloud, CheckCircle, AlertCircle, Loader } from "lucide-react";
+import { UploadCloud, CheckCircle, AlertCircle } from "lucide-react";
 
 interface ImageUploaderProps {
   label: string;
